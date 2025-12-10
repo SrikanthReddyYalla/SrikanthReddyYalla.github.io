@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fintech Cockpit V5.2</title>
+    <title>Financial Calculator V8.1</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -73,7 +73,7 @@
         
         .input-field {
             width: 100%; min-width: 0; border: none; background: transparent; text-align: center;
-            font-size: 1rem; font-weight: 700; color: var(--text-main); padding: 0 8px; /* Increased padding */
+            font-size: 1rem; font-weight: 700; color: var(--text-main); padding: 0 4px; 
             font-family: 'Plus Jakarta Sans', sans-serif; -moz-appearance: textfield;
         }
         .input-field::-webkit-inner-spin-button { -webkit-appearance: none; }
@@ -106,30 +106,31 @@
         .btn-add { width: 100%; padding: 14px; background: var(--text-main); color: var(--bg-card); border: none; border-radius: 14px; font-weight: 700; cursor: pointer; margin-top: 15px; font-size: 0.95rem; }
         .tag { display: flex; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--border); padding: 10px 14px; border-radius: 8px; margin-top: 10px; font-size: 0.85rem; font-weight: 600; align-items: center; }
         .tag-close { color: var(--danger); cursor: pointer; font-weight: 800; padding: 4px; }
+        
+        /* SUB-SECTION BOX */
+        .sub-config {
+            border: 1px solid var(--border); background: var(--bg-input);
+            padding: 15px; border-radius: 16px; margin-bottom: 20px;
+        }
 
         /* RESULTS & CHART SPACING */
-        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; } /* Increased margin-bottom */
+        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; } 
         .stat-card { background: var(--bg-input); border-radius: 16px; padding: 16px; text-align: center; border: 1px solid transparent; }
-        .stat-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; }
-        .stat-value { font-size: 1.1rem; font-weight: 800; color: var(--text-main); word-break: break-all; }
+        .stat-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .stat-value { font-size: 1.2rem; font-weight: 800; color: var(--text-main); word-break: break-all; line-height: 1.3; }
         
-        .chart-container { 
-            position: relative; 
-            height: 320px; 
-            width: 100%; 
-            margin-top: 25px; /* Added spacing from numbers */
-            padding-top: 10px; /* Internal padding */
-        }
+        .chart-container { position: relative; height: 320px; width: 100%; margin-top: 25px; padding-top: 10px; }
         
         .table-scroll { max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 16px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 400px; }
-        th { background: var(--bg-input); padding: 14px; text-align: right; font-weight: 700; color: var(--text-muted); position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-input); padding: 14px; text-align: right; font-weight: 700; color: var(--text-muted); position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--border); white-space: nowrap; }
         td { padding: 12px 14px; text-align: right; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
         th:first-child, td:first-child { text-align: left; }
         .hl-row { background: rgba(16, 185, 129, 0.1); }
         .text-green { color: var(--secondary); } .text-purple { color: #6366F1; } .text-orange { color: var(--accent); }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Grid Fixes */
         @media (max-width: 600px) { .row-grid { grid-template-columns: 1fr; gap: 10px; } }
     </style>
 </head>
@@ -137,7 +138,7 @@
 
 <div class="container">
     <header>
-        <div class="brand"><h1>Fintech Cockpit</h1></div>
+        <div class="brand"><h1>Financial Calculator</h1></div>
         <button class="theme-btn" onclick="toggleTheme()">☀ / 🌙</button>
     </header>
 
@@ -159,20 +160,49 @@
             </div>
             
             <div class="input-group">
-                <div class="label-row"><span id="re_area_lbl">Area</span><span id="re_price_lbl">Price/Unit</span></div>
+                <div class="label-row"><span id="re_area_lbl">Area</span><span id="re_price_lbl">Base Price/Unit</span></div>
                 <div class="row-grid">
                     <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_sft', -50)">-</button><input type="number" class="input-field" id="re_sft" value="1500" oninput="calculateRealEstate('cost')"><button class="step-btn" onclick="stepVal('re_sft', 50)">+</button></div>
                     <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_price_sft', -100)">-</button><input type="number" class="input-field" id="re_price_sft" value="6500" oninput="calculateRealEstate('cost')"><button class="step-btn" onclick="stepVal('re_price_sft', 100)">+</button></div>
                 </div>
             </div>
+
+            <div class="sub-config">
+                <div class="panel-title" style="margin-bottom:0; cursor:pointer; font-size:0.9rem; color:var(--primary)" onclick="toggleAddCharges()">
+                    <span>Additional Charges (Optional)</span>
+                    <span id="add_charge_icon" style="font-size:1.2rem; font-weight:bold">+</span>
+                </div>
+                <div id="add_charges_content" style="display:none; padding-top:20px; border-top:1px dashed var(--border); margin-top:15px;">
+                    <div class="input-group">
+                        <div class="label-row"><span>Corner Cost (/Unit)</span><span>Facing Cost (/Unit)</span></div>
+                        <div class="row-grid">
+                            <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_cost_corner', -10)">-</button><input type="number" class="input-field" id="re_cost_corner" value="0" oninput="calculateRealEstate('cost')"><button class="step-btn" onclick="stepVal('re_cost_corner', 10)">+</button></div>
+                            <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_cost_facing', -10)">-</button><input type="number" class="input-field" id="re_cost_facing" value="0" oninput="calculateRealEstate('cost')"><button class="step-btn" onclick="stepVal('re_cost_facing', 10)">+</button></div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="label-row"><span>Floor Rise (/Unit)</span><span>Amenities (Fixed)</span></div>
+                        <div class="row-grid">
+                            <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_cost_floor', -10)">-</button><input type="number" class="input-field" id="re_cost_floor" value="0" oninput="calculateRealEstate('cost')"><button class="step-btn" onclick="stepVal('re_cost_floor', 10)">+</button></div>
+                            <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_cost_amenities', -10000)">-</button><input type="number" class="input-field" id="re_cost_amenities" value="0" oninput="calculateRealEstate('cost')"><button class="step-btn" onclick="stepVal('re_cost_amenities', 10000)">+</button></div>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom:0;">
+                        <div class="label-row"><span>Corpus Fund (Fixed)</span></div>
+                        <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_cost_corpus', -10000)">-</button><input type="number" class="input-field" id="re_cost_corpus" value="0" oninput="calculateRealEstate('cost')"><button class="step-btn" onclick="stepVal('re_cost_corpus', 10000)">+</button></div>
+                    </div>
+                </div>
+            </div>
             
             <div class="input-group">
                 <div class="label-row"><span>Down Payment Amount</span><span>Down Payment % (<span id="re_dp_percent_disp">20.00</span>)</span></div>
-                <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:10px;">
+                <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:10px;">
                     <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_dp_amt', -50000)">-</button><input type="number" class="input-field" id="re_dp_amt" oninput="syncDP('amt')"><button class="step-btn" onclick="stepVal('re_dp_amt', 50000)">+</button></div>
                     <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('re_dp_percent', -0.25)">-</button><input type="number" class="input-field" id="re_dp_percent" value="20.00" step="0.01" oninput="syncDP('percent')"><button class="step-btn" onclick="stepVal('re_dp_percent', 0.25)">+</button></div>
                 </div>
-                <input type="range" id="re_dp_rng" min="0" max="90" step="0.1" value="20" oninput="syncDP('rng')">
+                <input type="range" id="re_dp_rng" min="0" max="99" step="0.1" value="20" oninput="syncDP('rng')">
             </div>
 
             <div class="input-group">
@@ -314,7 +344,10 @@
             <div class="extra-pay-box">
                 <label style="display:flex; align-items:center; margin-bottom:10px; font-weight:700;"><input type="checkbox" id="sip_stepup_check" onchange="toggleStepUp()" style="margin-right:10px;"> Enable Step-Up</label>
                 <div id="stepup_panel" style="display:none;">
-                    <div class="strategy-toggle"><div class="strategy-opt selected" onclick="setStepType('percent')">Percentage</div><div class="strategy-opt" onclick="setStepType('value')">Amount</div></div>
+                    <div class="strategy-toggle">
+                        <div class="strategy-opt selected" id="step_type_percent" onclick="setStepType('percent')">Percentage</div>
+                        <div class="strategy-opt" id="step_type_value" onclick="setStepType('value')">Amount</div>
+                    </div>
                     <input type="hidden" id="sip_step_type" value="percent">
                     <div class="stepper-wrapper"><button class="step-btn" onclick="stepVal('sip_step_val', -1)">-</button><input type="number" class="input-field" id="sip_step_val" value="10" oninput="calculateSIP()"><button class="step-btn" onclick="stepVal('sip_step_val', 1)">+</button></div>
                 </div>
@@ -414,6 +447,18 @@
         if(step % 1 !== 0) el.value = val.toFixed(1); else el.value = val.toFixed(0);
         el.dispatchEvent(new Event('input')); 
     }
+    
+    function toggleAddCharges() {
+        const content = document.getElementById('add_charges_content');
+        const icon = document.getElementById('add_charge_icon');
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            icon.innerText = '-';
+        } else {
+            content.style.display = 'none';
+            icon.innerText = '+';
+        }
+    }
 
     /* --- INIT --- */
     window.onload = function() { calculateRealEstate('cost'); }
@@ -447,20 +492,24 @@
     }
 
     function syncDP(source) {
-        const sft = safeGet('re_sft'); const price = safeGet('re_price_sft'); const total = sft*price;
+        const sft = safeGet('re_sft'); const price = safeGet('re_price_sft');
+        const extraSft = safeGet('re_cost_corner') + safeGet('re_cost_facing') + safeGet('re_cost_floor');
+        const extraFixed = safeGet('re_cost_amenities') + safeGet('re_cost_corpus');
+        const total = (sft * (price + extraSft)) + extraFixed;
+        
         if(total===0) return;
         const amtEl = document.getElementById('re_dp_amt'); const rngEl = document.getElementById('re_dp_rng'); const perEl = document.getElementById('re_dp_percent');
         const disp = document.getElementById('re_dp_percent_disp');
 
         if(source==='amt') {
-            let p=(safeGet('re_dp_amt')/total)*100; if(p>100)p=100;
+            let p=(safeGet('re_dp_amt')/total)*100; if(p>99)p=99;
             if(perEl) perEl.value=p.toFixed(2); 
             if(rngEl) rngEl.value=p; 
-            if(disp) disp.innerText=p.toFixed(0);
+            if(disp) disp.innerText=p.toFixed(2);
         } else {
             let p = source==='rng' ? (rngEl?rngEl.value:20) : (perEl?perEl.value:20);
             if(rngEl) rngEl.value=p; if(perEl) perEl.value=p; 
-            if(disp) disp.innerText=parseFloat(p).toFixed(0);
+            if(disp) disp.innerText=parseFloat(p).toFixed(2);
             if(amtEl) amtEl.value=(total*(p/100)).toFixed(0);
         }
         calculateRealEstate();
@@ -500,7 +549,7 @@
     function getPrepay(type, yr) { return customPayments[type].filter(p=>p.year===yr).reduce((s,p)=>s+p.amt,0); }
 
     /* --- CHART --- */
-    function updateChart(id, cvs, lbls, d1, l1, c1, d2, l2, c2, d3, l3, c3) {
+    function updateChart(id, cvs, lbls, d1, l1, c1, d2, l2, c2, d3, l3, c3, d4, l4, c4) {
         const el = document.getElementById(cvs); if(!el) return;
         const ctx=el.getContext('2d');
         if(charts[id]) charts[id].destroy();
@@ -511,6 +560,8 @@
         ds.push({label:l1, data:d1, borderColor:c1, backgroundColor:grad1, tension:0.4, fill:true, borderWidth:2, pointRadius:0});
         if(d2) ds.push({label:l2, data:d2, borderColor:c2, backgroundColor:c2+'10', tension:0.4, fill:true, borderWidth:2, pointRadius:0, borderDash:[5,5]});
         if(d3) ds.push({label:l3, data:d3, borderColor:c3, backgroundColor:c3+'10', tension:0.4, fill:true, borderWidth:2, pointRadius:0});
+        if(d4) ds.push({label:l4, data:d4, borderColor:c4, backgroundColor:'transparent', tension:0.4, fill:false, borderWidth:2, pointRadius:0, borderDash:[2,2]});
+
         charts[id]=new Chart(ctx,{type:'line', data:{labels:lbls, datasets:ds}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:txt,font:{family:'Plus Jakarta Sans'}}}, tooltip:{mode:'index', intersect:false}}, scales:{x:{ticks:{color:txt}, grid:{color:grd, drawBorder:false}}, y:{ticks:{color:txt, callback:v=>v>=1000?v/1000+'k':v}, grid:{color:grd, drawBorder:false}}}}});
     }
 
@@ -601,14 +652,20 @@
 
     /* --- REAL ESTATE CALC --- */
     function calculateRealEstate(src) {
-        const sft = safeGet('re_sft'); const price = safeGet('re_price_sft'); const cost = sft*price;
+        const sft = safeGet('re_sft'); 
+        const price = safeGet('re_price_sft'); 
+        const extraSft = safeGet('re_cost_corner') + safeGet('re_cost_facing') + safeGet('re_cost_floor');
+        const extraFixed = safeGet('re_cost_amenities') + safeGet('re_cost_corpus');
+        const cost = (sft * (price + extraSft)) + extraFixed;
+
         if(src==='cost') { 
             let p = safeGet('re_dp_percent') || 20; 
             safeSet('re_dp_amt', (cost*(p/100)).toFixed(0)); 
         }
         if(safeGet('re_dp_amt') === 0 && cost > 0) safeSet('re_dp_amt', (cost*0.2).toFixed(0));
         
-        const dp = safeGet('re_dp_amt'); const loan = cost-dp;
+        const dp = safeGet('re_dp_amt'); 
+        const loan = cost - dp;
         const yrs = safeGet('re_tenure_num') || 20;
         const rate = safeGet('re_rate_num'); const r = rate/1200; const n = yrs*12; 
         const yieldPercent = safeGet('re_yield_num');
@@ -634,7 +691,9 @@
     function genSchedule(P, emi, r, yrs, type, cost, tid, cid, origTotal, rentalYield) {
         let bal=P; let paid=0; let mElapsed=0; let closed=false; let currentEMI = emi;
         let lbls=['Start']; let dBal=[P]; let dVal=[cost]; let cVal=cost; let dWealth = [cost]; 
-        let accumRent = 0; let rows=[]; let strategy = strategies[type]; 
+        let dInt = [0]; let accumRent = 0; let accumInt = 0;
+        let rows=[]; let strategy = strategies[type]; 
+
         for(let y=1; y<=yrs; y++){
             let pre=getPrepay(type, y);
             for(let m=1; m<=12; m++){
@@ -642,7 +701,10 @@
                 let int=bal*r; let prin=currentEMI-int; 
                 if(bal<prin) { prin=bal; int=0; closed=true; }
                 bal-=prin; paid+=currentEMI; mElapsed++;
-                let row={m:(y-1)*12+m, emi:currentEMI, i:int, p:prin, b:bal, pre:0};
+                accumInt += int;
+
+                let row={m:(y-1)*12+m, emi:currentEMI, i:int, p:prin, b:bal, pre:0, totInt: accumInt};
+                
                 if(m===12 && pre>0 && !closed){
                     if(bal<pre) pre=bal;
                     bal-=pre; paid+=pre; row.pre=pre; row.b=bal;
@@ -655,7 +717,7 @@
                 rows.push(row);
                 if(closed) break;
             }
-            lbls.push('Yr '+y); dBal.push(bal<0?0:bal); 
+            lbls.push('Yr '+y); dBal.push(bal<0?0:bal); dInt.push(accumInt);
             if(type==='re'){ 
                 cVal*=1.05; dVal.push(cVal); 
                 let yearlyRent = cVal * (rentalYield/100);
@@ -663,26 +725,31 @@
                 dWealth.push(cVal + (accumRent * 2));
             }
         }
+
         let allInt = rows.reduce((s,x)=>s+x.i,0); let run=0; let tableData = [];
         rows.forEach(x=>{
             let rem = allInt-run-x.i; run+=x.i;
-            tableData.push({ d:[x.m, formatMoney(x.emi), formatMoney(x.i), formatMoney(x.p+x.pre), formatMoney(x.b), formatMoney(rem>0?rem:0)], pre:x.pre>0, preVal:x.pre });
+            tableData.push({ d:[x.m, formatMoney(x.emi), formatMoney(x.i), formatMoney(x.p+x.pre), formatMoney(x.b), formatMoney(x.totInt)], pre:x.pre>0, preVal:x.pre });
         });
-        renderTable(tid, ['Month', 'EMI', 'Interest', 'Principal+Pre', 'Balance', 'Int. Rem'], tableData);
+        renderTable(tid, ['Month', 'EMI', 'Interest', 'Principal+Pre', 'Balance', 'Tot. Int.'], tableData);
+
         let saved = origTotal-paid; let timeSave = (yrs*12-mElapsed)/12;
         safeSet(type+'_saved', saved>0?formatMoney(saved):"0");
         safeSet(type+'_time_saved', timeSave>0?timeSave.toFixed(1)+" Yrs":"0 Yrs");
         if(type==='loan') safeSet('loan_total_pay', formatMoney(paid));
+        
         if(type==='re') {
             safeSet('re_rent_val', formatMoney(cVal + (accumRent * 2)));
-            updateChart(type, cid, lbls, dWealth, 'Wealth (Prop + 2x Rent)', '#10B981', dBal, 'Loan', '#EF4444', dVal, 'Prop Value', '#8B5CF6');
-        } else updateChart(type, cid, lbls, dBal, 'Balance', '#6366F1');
+            updateChart(type, cid, lbls, dWealth, 'Wealth (Prop + 2x Rent)', '#10B981', dBal, 'Loan Balance', '#EF4444', dVal, 'Prop Value', '#8B5CF6', dInt, 'Total Interest', '#F59E0B');
+        } else {
+            updateChart(type, cid, lbls, dBal, 'Loan Balance', '#6366F1', dInt, 'Total Interest', '#F59E0B');
+        }
     }
 
     /* --- SIP/SWP/LUMP/TRADE --- */
     function calculateSIP(){
         const monthly=safeGet('sip_amount_num'); const rate=safeGet('sip_rate_num'); const years=safeGet('sip_years_num');
-        const st=document.getElementById('sip_stepup_check').checked; const sv=safeGet('sip_step_val'); const type=document.querySelector('input[name="stepup_type"]:checked').value;
+        const st=document.getElementById('sip_stepup_check').checked; const sv=safeGet('sip_step_val'); const type=document.getElementById('sip_step_type').value;
         let tot=0; let val=0; let cur=monthly; const mr=rate/1200; let l=[], dV=[], dI=[], rows=[];
         for(let m=1;m<=years*12;m++){
             val=(val+cur)*(1+mr); tot+=cur;
@@ -692,7 +759,7 @@
         safeSet('sip_total', formatMoney(val)); safeSet('sip_invested', formatMoney(tot)); safeSet('sip_gains', formatMoney(val-tot));
         updateChart('sip','sipChart',l,dV,'Value','#6366F1',dI,'Invested','#9CA3AF'); renderTable('sip_table',['Year','Invested','Value'],rows);
     }
-    function setStepType(t){ document.getElementById('sip_step_type').value=t; calculateSIP(); }
+    function setStepType(t){ document.getElementById('sip_step_type').value=t; document.getElementById('step_type_percent').classList.toggle('selected', t==='percent'); document.getElementById('step_type_value').classList.toggle('selected', t==='value'); calculateSIP(); }
     function toggleStepUp(){ document.getElementById('stepup_panel').style.display=document.getElementById('sip_stepup_check').checked?'block':'none'; calculateSIP(); }
 
     function calculateSWP(){
