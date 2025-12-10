@@ -74,6 +74,9 @@
         .strategy-toggle { display: flex; gap: 10px; margin-bottom: 15px; background: var(--bg-card); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
         .strategy-opt { flex: 1; text-align: center; padding: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border-radius: 8px; color: var(--text-muted); transition: 0.2s; }
         .strategy-opt.selected { background: var(--success); color: white; box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3); }
+        /* Specific color for Smart Plan toggle to match theme */
+        #smartplan .strategy-opt.selected { background: var(--primary); }
+
         .radio-group { display: flex; gap: 15px; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
         
         .btn-add { width: 100%; padding: 12px; background: var(--text-main); color: var(--bg-card); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
@@ -119,22 +122,28 @@
     <div id="smartplan" class="calc-grid active">
         <div class="panel">
             <div class="panel-title">Plan Config</div>
+            
+            <div class="strategy-toggle" style="margin-bottom: 20px;">
+                <div class="strategy-opt selected" id="smart_freq_monthly" onclick="setSmartFreq('monthly')">Monthly</div>
+                <div class="strategy-opt" id="smart_freq_yearly" onclick="setSmartFreq('yearly')">Yearly</div>
+            </div>
+
             <div class="input-group">
-                <div class="label-row"><span>Monthly Investment</span></div>
+                <div class="label-row"><span id="smart_amt_label">Monthly Investment</span></div>
                 <input type="number" class="input-field" id="smart_amt_num" value="10000" oninput="sync('smart_amt', 'num')">
-                <input type="range" id="smart_amt_rng" min="1000" max="100000" step="500" value="10000" oninput="sync('smart_amt', 'rng')">
+                <input type="range" id="smart_amt_rng" min="1000" max="200000" step="500" value="10000" oninput="sync('smart_amt', 'rng')">
             </div>
             
             <div class="input-group">
                 <div class="label-row"><span>Investment Years (Pay)</span></div>
-                <input type="number" class="input-field" id="smart_inv_yrs_num" value="10" oninput="calculateSmartPlan('base')">
-                <input type="range" id="smart_inv_yrs_rng" min="1" max="40" step="1" value="10" oninput="calculateSmartPlan('base')">
+                <input type="number" class="input-field" id="smart_inv_yrs_num" value="10" oninput="sync('smart_inv_yrs', 'num')">
+                <input type="range" id="smart_inv_yrs_rng" min="1" max="40" step="1" value="10" oninput="sync('smart_inv_yrs', 'rng')">
             </div>
             
             <div class="input-group">
                 <div class="label-row"><span>Freeze/Wait Years (Hold)</span></div>
-                <input type="number" class="input-field" id="smart_wait_yrs_num" value="5" oninput="calculateSmartPlan('base')">
-                <input type="range" id="smart_wait_yrs_rng" min="0" max="30" step="1" value="5" oninput="calculateSmartPlan('base')">
+                <input type="number" class="input-field" id="smart_wait_yrs_num" value="5" oninput="sync('smart_wait_yrs', 'num')">
+                <input type="range" id="smart_wait_yrs_rng" min="0" max="30" step="1" value="5" oninput="sync('smart_wait_yrs', 'rng')">
                 <div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px; text-align:right;">Total Duration: <span id="smart_total_dur">15</span> Years</div>
             </div>
 
@@ -177,12 +186,13 @@
     <div id="realestate" class="calc-grid">
         <div class="panel">
             <div class="panel-title">Property Config</div>
-            <div class="input-group"><div class="label-row"><span>Area (Sft) / Price</span></div><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><input type="number" class="input-field" id="re_sft" value="1500" oninput="calculateRealEstate('cost')"><input type="number" class="input-field" id="re_price_sft" value="6500" oninput="calculateRealEstate('cost')"></div></div>
-            <div class="input-group"><div class="label-row"><span>Down Payment</span></div><div style="display:grid; grid-template-columns:1fr 100px; gap:10px;"><input type="number" class="input-field" id="re_dp_amt" oninput="syncDP('amt')"><input type="number" class="input-field" id="re_dp_percent" value="20" oninput="syncDP('percent')"></div><input type="range" id="re_dp_rng" min="0" max="90" step="1" value="20" oninput="syncDP('rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Area (Sft)</span><span>Price/Sft</span></div><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><input type="number" class="input-field" id="re_sft" value="1500" oninput="calculateRealEstate('cost')"><input type="number" class="input-field" id="re_price_sft" value="6500" oninput="calculateRealEstate('cost')"></div></div>
+            <div class="input-group"><div class="label-row"><span>Down Payment</span><span><span id="re_dp_percent_disp">20</span>%</span></div><div style="display:grid; grid-template-columns:1fr 100px; gap:10px;"><input type="number" class="input-field" id="re_dp_amt" oninput="syncDP('amt')"><input type="number" class="input-field" id="re_dp_percent" value="20" oninput="syncDP('percent')"></div><input type="range" id="re_dp_rng" min="0" max="90" step="1" value="20" oninput="syncDP('rng')"></div>
             <div class="input-group"><div class="label-row"><span>Rate (%)</span></div><input type="number" class="input-field" id="re_rate_num" value="8.5" oninput="sync('re_rate', 'num')"><input type="range" id="re_rate_rng" min="5" max="15" step="0.1" value="8.5" oninput="sync('re_rate', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Rental Yield (%)</span></div><input type="number" class="input-field" id="re_yield_num" value="3.5" oninput="sync('re_yield', 'num')"><input type="range" id="re_yield_rng" min="1" max="10" step="0.1" value="3.5" oninput="sync('re_yield', 'rng')"></div>
             <div class="extra-pay-box">
-                <div class="strategy-toggle"><div class="strategy-opt selected" id="re_strat_tenure" onclick="setStrategy('re', 'tenure')">Reduce Tenure</div><div class="strategy-opt" id="re_strat_emi" onclick="setStrategy('re', 'emi')">Reduce EMI</div></div>
+                <div class="panel-title" style="font-size:0.9rem; margin-bottom:10px;">Pre-Closure Strategy</div>
+                <div class="strategy-toggle"><div class="strategy-opt selected" id="re_strat_tenure" onclick="setStrategy('re', 'tenure')">📉 Reduce Tenure</div><div class="strategy-opt" id="re_strat_emi" onclick="setStrategy('re', 'emi')">💵 Reduce EMI</div></div>
                 <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;"><input type="number" id="re_part_amt" placeholder="Amount" class="input-field" style="background:var(--bg-card)"><input type="number" id="re_part_year" placeholder="Year" class="input-field" style="background:var(--bg-card)"></div>
                 <button class="btn-add" onclick="addPayment('re')">Add Payment</button><div id="re_payments_list"></div>
             </div>
@@ -191,8 +201,8 @@
             <div class="panel-title">Valuation Analysis</div>
             <div class="summary-grid">
                 <div class="stat-card"><span class="stat-label">Total Cost</span><span class="stat-value" id="re_total_cost">0</span></div>
-                <div class="stat-card"><span class="stat-label">Prop + 2xRent</span><span class="stat-value text-green" id="re_rent_val">0</span></div>
                 <div class="stat-card"><span class="stat-label">Initial EMI</span><span class="stat-value" id="re_emi">0</span></div>
+                <div class="stat-card"><span class="stat-label">Prop + 2xRent</span><span class="stat-value text-green" id="re_rent_val">0</span></div>
                 <div class="stat-card"><span class="stat-label">Interest Saved</span><span class="stat-value text-green" id="re_saved">0</span></div>
             </div>
             <div class="chart-container"><canvas id="reChart"></canvas></div>
@@ -205,8 +215,9 @@
             <div class="panel-title">Loan Config</div>
             <div class="input-group"><div class="label-row"><span>Loan Amount</span></div><input type="number" class="input-field" id="loan_amount_num" value="5000000" oninput="sync('loan_amount', 'num')"><input type="range" id="loan_amount_rng" min="100000" max="20000000" step="50000" value="5000000" oninput="sync('loan_amount', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Rate (%)</span></div><input type="number" class="input-field" id="loan_rate_num" value="8.5" oninput="sync('loan_rate', 'num')"><input type="range" id="loan_rate_rng" min="5" max="20" step="0.1" value="8.5" oninput="sync('loan_rate', 'rng')"></div>
-            <div class="input-group"><div class="label-row"><span>Tenure</span></div><input type="number" class="input-field" id="loan_years_num" value="20" oninput="sync('loan_years', 'num')"><input type="range" id="loan_years_rng" min="1" max="30" step="1" value="20" oninput="sync('loan_years', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Tenure (Years)</span></div><input type="number" class="input-field" id="loan_years_num" value="20" oninput="sync('loan_years', 'num')"><input type="range" id="loan_years_rng" min="1" max="30" step="1" value="20" oninput="sync('loan_years', 'rng')"></div>
             <div class="extra-pay-box">
+                <div class="panel-title" style="font-size:0.9rem; margin-bottom:10px;">Pre-Payment Strategy</div>
                 <div class="strategy-toggle"><div class="strategy-opt selected" id="loan_strat_tenure" onclick="setStrategy('loan', 'tenure')">Reduce Tenure</div><div class="strategy-opt" id="loan_strat_emi" onclick="setStrategy('loan', 'emi')">Reduce EMI</div></div>
                 <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;"><input type="number" id="loan_part_amt" placeholder="Amount" class="input-field" style="background:var(--bg-card)"><input type="number" id="loan_part_year" placeholder="Year" class="input-field" style="background:var(--bg-card)"></div>
                 <button class="btn-add" onclick="addPayment('loan')">Add Payment</button><div id="loan_payments_list"></div>
@@ -234,7 +245,7 @@
             <div class="extra-pay-box">
                 <label style="display:flex; align-items:center; margin-bottom:10px; font-weight:600;"><input type="checkbox" id="sip_stepup_check" onchange="toggleStepUp()" style="margin-right:10px;"> Enable Step-Up</label>
                 <div id="stepup_panel" style="display:none;">
-                    <div style="margin-bottom:10px;"><label style="margin-right:15px;"><input type="radio" name="stepup_type" value="percent" checked onclick="calculateSIP()"> %</label><label><input type="radio" name="stepup_type" value="value" onclick="calculateSIP()"> Amount</label></div>
+                    <div style="margin-bottom:10px;"><label style="margin-right:15px;"><input type="radio" name="stepup_type" value="percent" checked onclick="calculateSIP()"> Percentage</label><label><input type="radio" name="stepup_type" value="value" onclick="calculateSIP()"> Amount</label></div>
                     <input type="number" class="input-field" id="sip_step_val" value="10" oninput="calculateSIP()">
                 </div>
             </div>
@@ -254,8 +265,8 @@
     <div id="swp" class="calc-grid">
         <div class="panel">
             <div class="panel-title">Withdrawal Plan</div>
-            <div class="input-group"><div class="label-row"><span>Corpus</span></div><input type="number" class="input-field" id="swp_amount_num" value="1000000" oninput="sync('swp_amount', 'num')"><input type="range" id="swp_amount_rng" min="100000" max="50000000" step="50000" value="1000000" oninput="sync('swp_amount', 'rng')"></div>
-            <div class="input-group"><div class="label-row"><span>Withdrawal</span></div><input type="number" class="input-field" id="swp_withdraw_num" value="5000" oninput="sync('swp_withdraw', 'num')"><input type="range" id="swp_withdraw_rng" min="500" max="200000" step="500" value="5000" oninput="sync('swp_withdraw', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Total Corpus</span></div><input type="number" class="input-field" id="swp_amount_num" value="1000000" oninput="sync('swp_amount', 'num')"><input type="range" id="swp_amount_rng" min="100000" max="50000000" step="50000" value="1000000" oninput="sync('swp_amount', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Withdrawal/Mo</span></div><input type="number" class="input-field" id="swp_withdraw_num" value="5000" oninput="sync('swp_withdraw', 'num')"><input type="range" id="swp_withdraw_rng" min="500" max="200000" step="500" value="5000" oninput="sync('swp_withdraw', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Return (%)</span></div><input type="number" class="input-field" id="swp_rate_num" value="8" oninput="sync('swp_rate', 'num')"><input type="range" id="swp_rate_rng" min="1" max="20" step="0.5" value="8" oninput="sync('swp_rate', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Years</span></div><input type="number" class="input-field" id="swp_years_num" value="10" oninput="sync('swp_years', 'num')"><input type="range" id="swp_years_rng" min="1" max="40" step="1" value="10" oninput="sync('swp_years', 'rng')"></div>
         </div>
@@ -277,8 +288,22 @@
             <div class="input-group"><div class="label-row"><span>Amount</span></div><input type="number" class="input-field" id="int_amount_num" value="100000" oninput="sync('int_amount', 'num')"><input type="range" id="int_amount_rng" min="5000" max="10000000" step="5000" value="100000" oninput="sync('int_amount', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Rate (%)</span></div><input type="number" class="input-field" id="int_rate_num" value="7" oninput="sync('int_rate', 'num')"><input type="range" id="int_rate_rng" min="1" max="15" step="0.1" value="7" oninput="sync('int_rate', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Years</span></div><input type="number" class="input-field" id="int_years_num" value="5" oninput="sync('int_years', 'num')"><input type="range" id="int_years_rng" min="1" max="25" step="1" value="5" oninput="sync('int_years', 'rng')"></div>
-            <div class="input-group"><div class="label-row"><span>Type</span></div><select id="int_type" class="custom-select" onchange="toggleFrequency(); recalcActive();"><option value="compound">Compound Interest</option><option value="simple">Simple Interest</option></select></div>
-            <div class="input-group" id="freq_group"><div class="label-row"><span>Frequency</span></div><select id="int_freq" class="custom-select" onchange="recalcActive()"><option value="1">Yearly</option><option value="2">Half-Yearly</option><option value="4">Quarterly</option><option value="12">Monthly</option></select></div>
+            <div class="input-group">
+                <div class="label-row"><span>Type</span></div>
+                <select id="int_type" class="custom-select" onchange="toggleFrequency(); recalcActive();">
+                    <option value="compound">Compound Interest</option>
+                    <option value="simple">Simple Interest</option>
+                </select>
+            </div>
+            <div class="input-group" id="freq_group">
+                <div class="label-row"><span>Frequency</span></div>
+                <select id="int_freq" class="custom-select" onchange="recalcActive()">
+                    <option value="1">Yearly</option>
+                    <option value="2">Half-Yearly</option>
+                    <option value="4">Quarterly</option>
+                    <option value="12">Monthly</option>
+                </select>
+            </div>
         </div>
         <div class="panel">
             <div class="panel-title">Maturity</div>
@@ -316,6 +341,7 @@
     /* --- CONFIG & STATE --- */
     let customPayments = { re: [], loan: [] };
     let strategies = { re: 'tenure', loan: 'tenure' }; 
+    let smartFreq = 'monthly';
     let charts = { sip: null, loan: null, swp: null, re: null, int: null, trade: null, smart: null };
     const formatMoney = (num) => num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
@@ -455,7 +481,15 @@
         el.innerHTML=ht+`</tbody>`;
     }
 
-    /* --- 0. SMART PLAN LOGIC (BIDIRECTIONAL) --- */
+    /* --- 0. SMART PLAN (NEW MONTHLY/YEARLY) --- */
+    function setSmartFreq(mode) {
+        smartFreq = mode;
+        document.getElementById('smart_freq_monthly').classList.toggle('selected', mode==='monthly');
+        document.getElementById('smart_freq_yearly').classList.toggle('selected', mode==='yearly');
+        document.getElementById('smart_amt_label').innerText = mode==='monthly' ? 'Monthly Investment' : 'Yearly Investment';
+        calculateSmartPlan('base');
+    }
+
     function calculateSmartPlan(source) {
         if(source.includes('amount')) {
             const num = document.getElementById('smart_plan_amount_num');
@@ -468,80 +502,86 @@
             if(source === 'rate_rng') num.value = rng.value; else rng.value = num.value;
         }
 
-        const monthly = safeGet('smart_amt_num');
+        const amt = safeGet('smart_amt_num');
         const invYears = safeGet('smart_inv_yrs_num');
         const waitYears = safeGet('smart_wait_yrs_num');
         const rateMF = safeGet('smart_mf_rate_num');
         
         safeSet('smart_total_dur', invYears + waitYears);
-        const monthsInv = invYears * 12;
-        const monthsWait = waitYears * 12;
+        
+        // Adjust for Frequency
+        const periodsPerYear = smartFreq==='monthly' ? 12 : 1;
+        const totalPeriodsInv = invYears * periodsPerYear;
+        const totalPeriodsWait = waitYears * periodsPerYear; // Usually growth is compounded annually if yearly mode, but for consistence we use same periods
 
         let ratePlan = safeGet('smart_plan_rate_num');
         let targetPlanAmount = safeGet('smart_plan_amount_num');
 
         if (source.includes('amount') && targetPlanAmount > 0) {
-            ratePlan = findRate(monthly, monthsInv, monthsWait, targetPlanAmount);
+            ratePlan = findRateSmart(amt, totalPeriodsInv, totalPeriodsWait, targetPlanAmount, periodsPerYear);
             safeSet('smart_plan_rate_num', ratePlan.toFixed(2));
             document.getElementById('smart_plan_rate_rng').value = ratePlan.toFixed(2);
         } else {
-            targetPlanAmount = calculateCorpus(monthly, monthsInv, monthsWait, ratePlan);
+            targetPlanAmount = calculateCorpusSmart(amt, totalPeriodsInv, totalPeriodsWait, ratePlan, periodsPerYear);
             safeSet('smart_plan_amount_num', targetPlanAmount.toFixed(0));
             document.getElementById('smart_plan_amount_rng').value = targetPlanAmount;
         }
 
-        let corpusMF = calculateCorpus(monthly, monthsInv, monthsWait, rateMF);
-        let totalInv = monthly * monthsInv;
+        let corpusMF = calculateCorpusSmart(amt, totalPeriodsInv, totalPeriodsWait, rateMF, periodsPerYear);
+        let totalInv = amt * totalPeriodsInv;
 
         safeSet('smart_invested', formatMoney(totalInv));
         safeSet('smart_plan_val', formatMoney(targetPlanAmount));
         safeSet('smart_mf_val', formatMoney(corpusMF));
         safeSet('smart_gap', formatMoney(corpusMF - targetPlanAmount));
 
-        generateSmartChart(monthly, monthsInv, monthsWait, ratePlan, rateMF);
+        generateSmartChart(amt, totalPeriodsInv, totalPeriodsWait, ratePlan, rateMF, periodsPerYear, invYears);
     }
 
-    function calculateCorpus(monthly, invMonths, waitMonths, rate) {
+    function calculateCorpusSmart(amt, invP, waitP, rate, freq) {
         let corpus = 0;
-        let r = rate/1200;
-        for(let m=1; m<=invMonths; m++) corpus = (corpus + monthly) * (1 + r);
-        for(let m=1; m<=waitMonths; m++) corpus = corpus * (1 + r);
+        let r = rate / (100 * freq); 
+        for(let i=0; i<invP; i++) corpus = (corpus + amt) * (1 + r);
+        for(let i=0; i<waitP; i++) corpus = corpus * (1 + r); // Compounding continues
         return corpus;
     }
 
-    function findRate(monthly, invMonths, waitMonths, targetVal) {
+    function findRateSmart(amt, invP, waitP, target, freq) {
         let low = 0, high = 100;
         for(let i=0; i<50; i++) {
             let mid = (low+high)/2;
-            let val = calculateCorpus(monthly, invMonths, waitMonths, mid);
-            if(val > targetVal) high = mid;
+            if(calculateCorpusSmart(amt, invP, waitP, mid, freq) > target) high = mid;
             else low = mid;
         }
         return low;
     }
 
-    function generateSmartChart(monthly, invMonths, waitMonths, rPlan, rMF) {
+    function generateSmartChart(amt, invP, waitP, rPlan, rMF, freq, invYrs) {
         let labels = ['Start'];
-        let dInv = [0];
-        let dPlan = [0];
-        let dMF = [0];
-        let cPlan = 0, cMF = 0, totInv = 0;
+        let dInv = [0]; let dPlan = [0]; let dMF = [0];
+        let cPlan = 0, cMF = 0, cInv = 0;
+        
+        let rateP = rPlan / (100 * freq);
+        let rateM = rMF / (100 * freq);
 
-        for(let m=1; m<=invMonths; m++) {
-            cPlan = (cPlan + monthly) * (1 + rPlan/1200);
-            cMF = (cMF + monthly) * (1 + rMF/1200);
-            totInv += monthly;
-            if(m%12===0) {
-                labels.push('Yr '+m/12);
-                dInv.push(totInv); dPlan.push(cPlan); dMF.push(cMF);
+        // Phase 1
+        for(let i=1; i<=invP; i++) {
+            cPlan = (cPlan + amt) * (1 + rateP);
+            cMF = (cMF + amt) * (1 + rateM);
+            cInv += amt;
+            // Push data point every year
+            if(i % freq === 0) {
+                labels.push('Yr ' + i/freq);
+                dInv.push(cInv); dPlan.push(cPlan); dMF.push(cMF);
             }
         }
-        for(let m=1; m<=waitMonths; m++) {
-            cPlan = cPlan * (1 + rPlan/1200);
-            cMF = cMF * (1 + rMF/1200);
-            if(m%12===0) {
-                labels.push('Yr '+(invMonths/12 + m/12));
-                dInv.push(totInv); dPlan.push(cPlan); dMF.push(cMF);
+        // Phase 2
+        for(let i=1; i<=waitP; i++) {
+            cPlan = cPlan * (1 + rateP);
+            cMF = cMF * (1 + rateM);
+            if(i % freq === 0) {
+                labels.push('Yr ' + (invYrs + i/freq));
+                dInv.push(cInv); dPlan.push(cPlan); dMF.push(cMF);
             }
         }
         updateChart('smart', 'smartChart', labels, dInv, 'Invested', '#9CA3AF', dPlan, 'Traditional Plan', '#6366F1', dMF, 'Mutual Fund', '#10B981');
