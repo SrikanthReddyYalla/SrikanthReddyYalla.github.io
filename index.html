@@ -3,98 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purple Financial Suite</title>
+    <title>Financial Toolkit - Pro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <style>
-        /* --- PURPLE THEME VARIABLES --- */
         :root {
-            /* Light Mode Palette */
-            --primary: #7C3AED;       /* Violet 600 */
-            --primary-hover: #6D28D9; /* Violet 700 */
-            --primary-light: #F5F3FF; /* Violet 50 (Backgrounds) */
-            --primary-glow: rgba(124, 58, 237, 0.15);
-            
-            --secondary: #10B981;     /* Emerald (Success) */
-            --accent: #F59E0B;        /* Amber (Warning) */
-            --danger: #EF4444;        /* Red (Danger) */
-            
-            /* UI Colors */
-            --bg-app: #F5F3FF;        /* Very light purple tint for body */
-            --bg-card: #FFFFFF;
-            --bg-input: #FAFAFA;
-            --text-main: #1E1B4B;     /* Dark Indigo Text */
-            --text-muted: #6B7280;
-            --border: #E5E7EB;
-            
-            --shadow-md: 0 4px 6px -1px rgba(124, 58, 237, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --primary: #6366F1; --primary-dark: #4F46E5; --primary-glow: rgba(99, 102, 241, 0.15);
+            --success: #10B981; --warning: #F59E0B; --danger: #EF4444;
+            --bg-app: #F3F4F6; --bg-card: #FFFFFF; --bg-input: #F9FAFB;
+            --text-main: #111827; --text-muted: #6B7280; --border: #E5E7EB;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --slider-track: #E5E7EB;
-        }
-
-        [data-theme="dark"] {
-            /* Dark Mode Palette */
-            --primary: #A78BFA;       /* Violet 400 (Lighter for dark mode) */
-            --primary-hover: #8B5CF6;
-            --primary-light: #2E1065; /* Very dark violet */
-            --primary-glow: rgba(139, 92, 246, 0.2);
-
-            --bg-app: #0F172A;        /* Slate 900 */
-            --bg-card: #1E293B;       /* Slate 800 */
-            --bg-input: #0F172A;
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --border: #334155;
             
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            /* Visual Diff Colors */
+            --trad-bg: #EEF2FF; --trad-border: #6366F1;
+            --mf-bg: #ECFDF5; --mf-border: #10B981;
+        }
+        [data-theme="dark"] {
+            --bg-app: #0F172A; --bg-card: #1E293B; --bg-input: #0F172A;
+            --text-main: #F8FAFC; --text-muted: #94A3B8; --border: #334155;
             --slider-track: #334155;
+            
+            --trad-bg: #1E1B4B; --trad-border: #6366F1;
+            --mf-bg: #064E3B; --mf-border: #10B981;
         }
-
         * { box-sizing: border-box; outline: none; }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-app);
-            color: var(--text-main);
-            margin: 0; padding: 20px;
-            transition: background 0.3s, color 0.3s;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-app); color: var(--text-main); margin: 0; padding: 20px; transition: 0.3s; }
         .container { max-width: 1200px; margin: 0 auto; }
 
         /* Header */
-        header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 30px; padding: 20px; 
-            background: var(--bg-card); border-radius: 24px; 
-            box-shadow: var(--shadow-md); border: 1px solid var(--border); 
-        }
-        h1 { 
-            font-size: 1.5rem; font-weight: 800; margin: 0; 
-            background: linear-gradient(135deg, var(--primary), #D946EF); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        }
-        .theme-btn { 
-            background: var(--bg-input); border: 1px solid var(--border); 
-            color: var(--text-main); padding: 10px 16px; border-radius: 12px; 
-            cursor: pointer; font-weight: 600; transition: 0.2s;
-        }
-        .theme-btn:hover { border-color: var(--primary); color: var(--primary); }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px; background: var(--bg-card); border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid var(--border); }
+        h1 { font-size: 1.5rem; font-weight: 800; margin: 0; background: linear-gradient(135deg, var(--primary), #A855F7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .theme-btn { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); padding: 10px 16px; border-radius: 12px; cursor: pointer; font-weight: 600; }
 
         /* Tabs */
-        .tabs-container { 
-            display: flex; gap: 8px; margin-bottom: 30px; overflow-x: auto; 
-            background: var(--bg-card); padding: 8px; border-radius: 20px; 
-            border: 1px solid var(--border); box-shadow: var(--shadow-md);
-        }
-        .tab-btn { 
-            flex: 1; padding: 12px; border: none; background: transparent; 
-            color: var(--text-muted); font-weight: 600; border-radius: 14px; 
-            cursor: pointer; white-space: nowrap; transition: 0.2s; 
-        }
-        .tab-btn:hover { color: var(--primary); background: var(--primary-light); }
-        .tab-btn.active { 
-            background: var(--primary); color: #fff; 
-            box-shadow: 0 4px 12px var(--primary-glow); 
-        }
+        .tabs-container { display: flex; gap: 5px; margin-bottom: 30px; overflow-x: auto; background: var(--bg-card); padding: 6px; border-radius: 16px; border: 1px solid var(--border); }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; border-radius: 12px; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px var(--primary-glow); }
 
         /* Layout */
         .calc-grid { display: none; grid-template-columns: 380px 1fr; gap: 30px; align-items: start; animation: fadeIn 0.4s ease-out; }
@@ -102,84 +47,54 @@
         @media (max-width: 1024px) { .calc-grid.active { grid-template-columns: 1fr; } }
 
         /* Panels */
-        .panel { 
-            background: var(--bg-card); border-radius: 24px; padding: 25px; 
-            box-shadow: var(--shadow-md); border: 1px solid var(--border); 
-        }
-        .panel-title { 
-            font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; 
-            display: flex; align-items: center; gap: 10px; color: var(--text-main);
-        }
-        .panel-title::before { 
-            content: ''; width: 8px; height: 8px; 
-            background: var(--primary); border-radius: 50%; display: block; 
-            box-shadow: 0 0 0 4px var(--primary-glow);
-        }
+        .panel { background: var(--bg-card); border-radius: 24px; padding: 25px; box-shadow: var(--shadow-md); border: 1px solid var(--border); }
+        .panel-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .panel-title::before { content: ''; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; display: block; }
 
         /* Inputs */
         .input-group { margin-bottom: 20px; }
-        .label-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-        .input-field { 
-            width: 100%; padding: 12px 16px; border-radius: 12px; 
-            border: 2px solid var(--bg-input); background: var(--bg-input); 
-            color: var(--text-main); font-weight: 700; text-align: right; 
-            font-size: 1rem; transition: 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .input-field:focus { border-color: var(--primary); background: var(--bg-card); box-shadow: 0 0 0 4px var(--primary-glow); }
-        .readonly { background: var(--primary-light); color: var(--primary); border-color: transparent; }
-        .custom-select { width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--bg-input); background: var(--bg-input); color: var(--text-main); font-weight: 700; text-align: right; font-size: 1rem; cursor: pointer; }
+        .label-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+        .input-field { width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--bg-input); background: var(--bg-input); color: var(--text-main); font-weight: 700; text-align: right; font-size: 1rem; }
+        .input-field:focus { border-color: var(--primary); background: var(--bg-card); }
+        .readonly { background: var(--primary-glow); color: var(--primary); border-color: transparent; }
+        .custom-select { width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--bg-input); background: var(--bg-input); color: var(--text-main); font-weight: 700; text-align: right; font-size: 1rem; }
 
         /* Sliders */
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; margin-top: 8px; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; margin-top: 5px; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: var(--slider-track); border-radius: 10px; }
-        input[type=range]::-webkit-slider-thumb { 
-            -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; 
-            background: var(--bg-card); border: 2px solid var(--primary); 
-            margin-top: -7px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-            transition: transform 0.1s;
-        }
-        input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.1); background: var(--primary); }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--primary); margin-top: -7px; }
 
-        /* Extra Box */
-        .extra-pay-box { 
-            background: linear-gradient(145deg, var(--bg-input), var(--bg-card)); 
-            border: 1px dashed var(--border); padding: 20px; 
-            border-radius: 16px; margin-top: 30px; 
-        }
-        .strategy-toggle { display: flex; gap: 8px; margin-bottom: 15px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1px solid var(--border); }
-        .strategy-opt { flex: 1; text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border-radius: 10px; color: var(--text-muted); transition: 0.2s; }
-        .strategy-opt.selected { background: var(--primary); color: white; box-shadow: 0 4px 10px var(--primary-glow); }
+        /* Color Boxes for Smart Plan */
+        .trad-box { background: var(--trad-bg); border: 1px solid var(--trad-border); padding: 20px; border-radius: 16px; margin-top: 20px; }
+        .mf-box { background: var(--mf-bg); border: 1px solid var(--mf-border); padding: 20px; border-radius: 16px; margin-top: 20px; }
+
+        /* Extra Box (Strategy) */
+        .extra-pay-box { background: linear-gradient(145deg, var(--bg-input), var(--bg-card)); border: 1px dashed var(--border); padding: 20px; border-radius: 16px; margin-top: 30px; }
+        
+        .strategy-toggle { display: flex; gap: 10px; margin-bottom: 15px; background: var(--bg-card); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
+        .strategy-opt { flex: 1; text-align: center; padding: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border-radius: 8px; color: var(--text-muted); transition: 0.2s; }
+        .strategy-opt.selected { background: var(--success); color: white; box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3); }
         .radio-group { display: flex; gap: 15px; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
         
-        .btn-add { 
-            width: 100%; padding: 12px; background: var(--text-main); color: var(--bg-card); 
-            border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; 
-            transition: 0.2s;
-        }
-        .btn-add:hover { opacity: 0.9; transform: translateY(-1px); }
-        .tag { 
-            display: flex; justify-content: space-between; background: var(--bg-card); 
-            border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; 
-            margin-top: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-main);
-        }
-        .tag-close { color: var(--danger); cursor: pointer; font-weight: 800; }
+        .btn-add { width: 100%; padding: 12px; background: var(--text-main); color: var(--bg-card); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .tag { display: flex; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; margin-top: 8px; font-size: 0.85rem; font-weight: 600; }
+        .tag-close { color: var(--danger); cursor: pointer; }
 
         /* Results */
         .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--bg-input); border-radius: 16px; padding: 20px; text-align: center; border: 1px solid transparent; transition: 0.2s; }
-        .stat-card:hover { border-color: var(--border); background: var(--bg-card); box-shadow: var(--shadow-md); }
-        .stat-label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-weight: 700; letter-spacing: 0.5px; }
+        .stat-card { background: var(--bg-input); border-radius: 16px; padding: 20px; text-align: center; border: 1px solid transparent; }
+        .stat-label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
         .stat-value { font-size: 1.25rem; font-weight: 800; color: var(--text-main); }
-        .text-green { color: var(--secondary); } 
-        .text-gradient { background: linear-gradient(135deg, var(--primary), #D946EF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-green { color: var(--success); } .text-gradient { background: linear-gradient(135deg, var(--primary), #A855F7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-purple { color: #6366F1; }
 
-        .chart-container { position: relative; height: 350px; width: 100%; margin: 10px 0; }
+        .chart-container { position: relative; height: 320px; width: 100%; margin: 10px 0; }
         .table-scroll { max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 16px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
         th { background: var(--bg-input); padding: 16px; text-align: right; font-weight: 700; color: var(--text-muted); position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--border); }
         td { padding: 12px 16px; text-align: right; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
         th:first-child, td:first-child { text-align: left; }
-        .hl-row { background: var(--primary-light); }
+        .hl-row { background: rgba(16, 185, 129, 0.1); }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -188,77 +103,99 @@
 
 <div class="container">
     <header>
-        <div class="brand"><h1>Fintech Pro</h1><p>Wealth & Real Estate Analytics</p></div>
+        <div class="brand"><h1>Fintech Pro</h1><p>Smart Pre-Closure & Wealth Engine</p></div>
         <button class="theme-btn" onclick="toggleTheme()">☀ / 🌙</button>
     </header>
 
     <div class="tabs-container">
-        <button class="tab-btn active" onclick="switchTab('realestate')">Real Estate</button>
+        <button class="tab-btn active" onclick="switchTab('smartplan')">Smart Plan</button>
+        <button class="tab-btn" onclick="switchTab('realestate')">Real Estate</button>
         <button class="tab-btn" onclick="switchTab('loan')">Home Loan</button>
-        <button class="tab-btn" onclick="switchTab('sip')">SIP (Step-Up)</button>
+        <button class="tab-btn" onclick="switchTab('sip')">SIP</button>
         <button class="tab-btn" onclick="switchTab('swp')">SWP</button>
         <button class="tab-btn" onclick="switchTab('lumpsum')">Lumpsum</button>
-        <button class="tab-btn" onclick="switchTab('trade')">Trade P&L</button>
     </div>
 
-    <div id="realestate" class="calc-grid active">
+    <div id="smartplan" class="calc-grid active">
         <div class="panel">
-            <div class="panel-title">Property Config</div>
+            <div class="panel-title">Plan Config</div>
             <div class="input-group">
-                <div class="label-row"><span>Area (Sft)</span><span>Price/Sft</span></div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <input type="number" class="input-field" id="re_sft" value="1500" oninput="calculateRealEstate('cost')">
-                    <input type="number" class="input-field" id="re_price_sft" value="6500" oninput="calculateRealEstate('cost')">
-                </div>
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Down Payment</span><span><span id="re_dp_percent_disp">20</span>%</span></div>
-                <div style="display:grid; grid-template-columns:1fr 100px; gap:10px;">
-                    <input type="number" class="input-field" id="re_dp_amt" oninput="syncDP('amt')">
-                    <input type="number" class="input-field" id="re_dp_percent" value="20" oninput="syncDP('percent')">
-                </div>
-                <input type="range" id="re_dp_rng" min="0" max="90" step="1" value="20" oninput="syncDP('rng')">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Calculated EMI</span></div>
-                <input type="text" id="re_emi_input" class="input-field readonly" readonly value="0">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Interest Rate (%)</span></div>
-                <input type="number" class="input-field" id="re_rate_num" value="8.5" oninput="sync('re_rate', 'num')">
-                <input type="range" id="re_rate_rng" min="5" max="15" step="0.1" value="8.5" oninput="sync('re_rate', 'rng')">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Rental Yield (%)</span></div>
-                <input type="number" class="input-field" id="re_yield_num" value="3.5" oninput="sync('re_yield', 'num')">
-                <input type="range" id="re_yield_rng" min="1" max="10" step="0.1" value="3.5" oninput="sync('re_yield', 'rng')">
+                <div class="label-row"><span>Monthly Investment</span></div>
+                <input type="number" class="input-field" id="smart_amt_num" value="10000" oninput="sync('smart_amt', 'num')">
+                <input type="range" id="smart_amt_rng" min="1000" max="100000" step="500" value="10000" oninput="sync('smart_amt', 'rng')">
             </div>
             
-            <div class="extra-pay-box">
-                <div class="panel-title" style="font-size:0.9rem; margin-bottom:10px;">Pre-Payment Strategy</div>
-                <div class="strategy-toggle">
-                    <div class="strategy-opt selected" id="re_strat_tenure" onclick="setStrategy('re', 'tenure')">Reduce Tenure</div>
-                    <div class="strategy-opt" id="re_strat_emi" onclick="setStrategy('re', 'emi')">Reduce EMI</div>
+            <div class="input-group">
+                <div class="label-row"><span>Investment Years (Pay)</span></div>
+                <input type="number" class="input-field" id="smart_inv_yrs_num" value="10" oninput="calculateSmartPlan('base')">
+                <input type="range" id="smart_inv_yrs_rng" min="1" max="40" step="1" value="10" oninput="calculateSmartPlan('base')">
+            </div>
+            
+            <div class="input-group">
+                <div class="label-row"><span>Freeze/Wait Years (Hold)</span></div>
+                <input type="number" class="input-field" id="smart_wait_yrs_num" value="5" oninput="calculateSmartPlan('base')">
+                <input type="range" id="smart_wait_yrs_rng" min="0" max="30" step="1" value="5" oninput="calculateSmartPlan('base')">
+                <div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px; text-align:right;">Total Duration: <span id="smart_total_dur">15</span> Years</div>
+            </div>
+
+            <div class="trad-box">
+                <div class="label-row" style="margin-bottom:15px; color:var(--primary); font-weight:800;"><strong>🏛️ Traditional Plan (Auto-Sync)</strong></div>
+                <div class="input-group">
+                    <div class="label-row"><span>Assured Maturity Amount</span><span style="font-size:0.7rem;">Calculates ROI</span></div>
+                    <input type="number" class="input-field" id="smart_plan_amount_num" placeholder="e.g. 2500000" oninput="calculateSmartPlan('amount_num')">
+                    <input type="range" id="smart_plan_amount_rng" min="100000" max="20000000" step="50000" value="2500000" oninput="calculateSmartPlan('amount_rng')">
                 </div>
-                <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
-                    <input type="number" id="re_part_amt" placeholder="Amount" class="input-field" style="background:var(--bg-card)">
-                    <input type="number" id="re_part_year" placeholder="Year" class="input-field" style="background:var(--bg-card)">
+                <div class="input-group">
+                    <div class="label-row"><span>Implied ROI (%)</span><span style="font-size:0.7rem;">Calculates Amount</span></div>
+                    <input type="number" class="input-field" id="smart_plan_rate_num" value="6" oninput="calculateSmartPlan('rate_num')">
+                    <input type="range" id="smart_plan_rate_rng" min="1" max="15" step="0.1" value="6" oninput="calculateSmartPlan('rate_rng')">
                 </div>
-                <button class="btn-add" onclick="addPayment('re')">Add Payment</button>
-                <div id="re_payments_list"></div>
+            </div>
+
+            <div class="mf-box">
+                <div class="label-row" style="margin-bottom:15px; color:var(--success); font-weight:800;"><strong>📈 Compare: Mutual Fund</strong></div>
+                <div class="input-group">
+                    <div class="label-row"><span>Expected ROI (%)</span></div>
+                    <input type="number" class="input-field" id="smart_mf_rate_num" value="12" oninput="sync('smart_mf_rate', 'num')">
+                    <input type="range" id="smart_mf_rate_rng" min="5" max="25" step="0.5" value="12" oninput="sync('smart_mf_rate', 'rng')">
+                </div>
             </div>
         </div>
 
         <div class="panel">
+            <div class="panel-title">Smart Comparison</div>
+            <div class="summary-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="stat-card"><span class="stat-label">Total Invested</span><span class="stat-value" id="smart_invested">0</span></div>
+                <div class="stat-card"><span class="stat-label">Traditional Maturity</span><span class="stat-value text-purple" id="smart_plan_val">0</span></div>
+                <div class="stat-card"><span class="stat-label">Mutual Fund Maturity</span><span class="stat-value text-green" id="smart_mf_val">0</span></div>
+                <div class="stat-card" style="background:var(--primary-glow); border:1px solid var(--primary);"><span class="stat-label" style="color:var(--primary)">Wealth Gap</span><span class="stat-value" style="color:var(--primary)" id="smart_gap">0</span></div>
+            </div>
+            <div class="chart-container"><canvas id="smartChart"></canvas></div>
+        </div>
+    </div>
+
+    <div id="realestate" class="calc-grid">
+        <div class="panel">
+            <div class="panel-title">Property Config</div>
+            <div class="input-group"><div class="label-row"><span>Area (Sft) / Price</span></div><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><input type="number" class="input-field" id="re_sft" value="1500" oninput="calculateRealEstate('cost')"><input type="number" class="input-field" id="re_price_sft" value="6500" oninput="calculateRealEstate('cost')"></div></div>
+            <div class="input-group"><div class="label-row"><span>Down Payment</span></div><div style="display:grid; grid-template-columns:1fr 100px; gap:10px;"><input type="number" class="input-field" id="re_dp_amt" oninput="syncDP('amt')"><input type="number" class="input-field" id="re_dp_percent" value="20" oninput="syncDP('percent')"></div><input type="range" id="re_dp_rng" min="0" max="90" step="1" value="20" oninput="syncDP('rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Rate (%)</span></div><input type="number" class="input-field" id="re_rate_num" value="8.5" oninput="sync('re_rate', 'num')"><input type="range" id="re_rate_rng" min="5" max="15" step="0.1" value="8.5" oninput="sync('re_rate', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Rental Yield (%)</span></div><input type="number" class="input-field" id="re_yield_num" value="3.5" oninput="sync('re_yield', 'num')"><input type="range" id="re_yield_rng" min="1" max="10" step="0.1" value="3.5" oninput="sync('re_yield', 'rng')"></div>
+            <div class="extra-pay-box">
+                <div class="strategy-toggle"><div class="strategy-opt selected" id="re_strat_tenure" onclick="setStrategy('re', 'tenure')">Reduce Tenure</div><div class="strategy-opt" id="re_strat_emi" onclick="setStrategy('re', 'emi')">Reduce EMI</div></div>
+                <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;"><input type="number" id="re_part_amt" placeholder="Amount" class="input-field" style="background:var(--bg-card)"><input type="number" id="re_part_year" placeholder="Year" class="input-field" style="background:var(--bg-card)"></div>
+                <button class="btn-add" onclick="addPayment('re')">Add Payment</button><div id="re_payments_list"></div>
+            </div>
+        </div>
+        <div class="panel">
             <div class="panel-title">Valuation Analysis</div>
             <div class="summary-grid">
                 <div class="stat-card"><span class="stat-label">Total Cost</span><span class="stat-value" id="re_total_cost">0</span></div>
-                <div class="stat-card"><span class="stat-label">Loan Amount</span><span class="stat-value" id="re_loan_amt">0</span></div>
                 <div class="stat-card"><span class="stat-label">Prop + 2xRent</span><span class="stat-value text-green" id="re_rent_val">0</span></div>
+                <div class="stat-card"><span class="stat-label">Initial EMI</span><span class="stat-value" id="re_emi">0</span></div>
                 <div class="stat-card"><span class="stat-label">Interest Saved</span><span class="stat-value text-green" id="re_saved">0</span></div>
             </div>
             <div class="chart-container"><canvas id="reChart"></canvas></div>
-            <div class="panel-title" style="margin-top:30px; font-size:1rem;">Monthly Schedule</div>
             <div class="table-scroll"><table id="re_table"></table></div>
         </div>
     </div>
@@ -266,41 +203,17 @@
     <div id="loan" class="calc-grid">
         <div class="panel">
             <div class="panel-title">Loan Config</div>
-            <div class="input-group">
-                <div class="label-row"><span>Loan Amount</span></div>
-                <input type="number" class="input-field" id="loan_amount_num" value="5000000" oninput="sync('loan_amount', 'num')">
-                <input type="range" id="loan_amount_rng" min="100000" max="20000000" step="50000" value="5000000" oninput="sync('loan_amount', 'rng')">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Calculated Initial EMI</span></div>
-                <input type="text" id="loan_emi_input" class="input-field readonly" readonly value="0">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Rate (%)</span></div>
-                <input type="number" class="input-field" id="loan_rate_num" value="8.5" oninput="sync('loan_rate', 'num')">
-                <input type="range" id="loan_rate_rng" min="5" max="20" step="0.1" value="8.5" oninput="sync('loan_rate', 'rng')">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Tenure (Years)</span></div>
-                <input type="number" class="input-field" id="loan_years_num" value="20" oninput="sync('loan_years', 'num')">
-                <input type="range" id="loan_years_rng" min="1" max="30" step="1" value="20" oninput="sync('loan_years', 'rng')">
-            </div>
+            <div class="input-group"><div class="label-row"><span>Loan Amount</span></div><input type="number" class="input-field" id="loan_amount_num" value="5000000" oninput="sync('loan_amount', 'num')"><input type="range" id="loan_amount_rng" min="100000" max="20000000" step="50000" value="5000000" oninput="sync('loan_amount', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Rate (%)</span></div><input type="number" class="input-field" id="loan_rate_num" value="8.5" oninput="sync('loan_rate', 'num')"><input type="range" id="loan_rate_rng" min="5" max="20" step="0.1" value="8.5" oninput="sync('loan_rate', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Tenure</span></div><input type="number" class="input-field" id="loan_years_num" value="20" oninput="sync('loan_years', 'num')"><input type="range" id="loan_years_rng" min="1" max="30" step="1" value="20" oninput="sync('loan_years', 'rng')"></div>
             <div class="extra-pay-box">
-                <div class="panel-title" style="font-size:0.9rem; margin-bottom:10px;">Pre-Payment Strategy</div>
-                <div class="strategy-toggle">
-                    <div class="strategy-opt selected" id="loan_strat_tenure" onclick="setStrategy('loan', 'tenure')">Reduce Tenure</div>
-                    <div class="strategy-opt" id="loan_strat_emi" onclick="setStrategy('loan', 'emi')">Reduce EMI</div>
-                </div>
-                <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
-                    <input type="number" id="loan_part_amt" placeholder="Amount" class="input-field" style="background:var(--bg-card)">
-                    <input type="number" id="loan_part_year" placeholder="Year" class="input-field" style="background:var(--bg-card)">
-                </div>
-                <button class="btn-add" onclick="addPayment('loan')">Add Payment</button>
-                <div id="loan_payments_list"></div>
+                <div class="strategy-toggle"><div class="strategy-opt selected" id="loan_strat_tenure" onclick="setStrategy('loan', 'tenure')">Reduce Tenure</div><div class="strategy-opt" id="loan_strat_emi" onclick="setStrategy('loan', 'emi')">Reduce EMI</div></div>
+                <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;"><input type="number" id="loan_part_amt" placeholder="Amount" class="input-field" style="background:var(--bg-card)"><input type="number" id="loan_part_year" placeholder="Year" class="input-field" style="background:var(--bg-card)"></div>
+                <button class="btn-add" onclick="addPayment('loan')">Add Payment</button><div id="loan_payments_list"></div>
             </div>
         </div>
         <div class="panel">
-            <div class="panel-title">Repayment Analysis</div>
+            <div class="panel-title">Repayment</div>
             <div class="summary-grid">
                 <div class="stat-card"><span class="stat-label">Initial EMI</span><span class="stat-value text-gradient" id="loan_emi">0</span></div>
                 <div class="stat-card"><span class="stat-label">Total Payable</span><span class="stat-value" id="loan_total_pay">0</span></div>
@@ -315,30 +228,13 @@
     <div id="sip" class="calc-grid">
         <div class="panel">
             <div class="panel-title">SIP Details</div>
-            <div class="input-group">
-                <div class="label-row"><span>Monthly Investment</span></div>
-                <input type="number" class="input-field" id="sip_amount_num" value="5000" oninput="sync('sip_amount', 'num')">
-                <input type="range" id="sip_amount_rng" min="500" max="1000000" step="500" value="5000" oninput="sync('sip_amount', 'rng')">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Return (%)</span></div>
-                <input type="number" class="input-field" id="sip_rate_num" value="12" oninput="sync('sip_rate', 'num')">
-                <input type="range" id="sip_rate_rng" min="1" max="30" step="0.5" value="12" oninput="sync('sip_rate', 'rng')">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><span>Years</span></div>
-                <input type="number" class="input-field" id="sip_years_num" value="10" oninput="sync('sip_years', 'num')">
-                <input type="range" id="sip_years_rng" min="1" max="40" step="1" value="10" oninput="sync('sip_years', 'rng')">
-            </div>
+            <div class="input-group"><div class="label-row"><span>Monthly Inv</span></div><input type="number" class="input-field" id="sip_amount_num" value="5000" oninput="sync('sip_amount', 'num')"><input type="range" id="sip_amount_rng" min="500" max="1000000" step="500" value="5000" oninput="sync('sip_amount', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Return (%)</span></div><input type="number" class="input-field" id="sip_rate_num" value="12" oninput="sync('sip_rate', 'num')"><input type="range" id="sip_rate_rng" min="1" max="30" step="0.5" value="12" oninput="sync('sip_rate', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Years</span></div><input type="number" class="input-field" id="sip_years_num" value="10" oninput="sync('sip_years', 'num')"><input type="range" id="sip_years_rng" min="1" max="40" step="1" value="10" oninput="sync('sip_years', 'rng')"></div>
             <div class="extra-pay-box">
-                <label style="display:flex; align-items:center; margin-bottom:10px; font-weight:600; cursor:pointer">
-                    <input type="checkbox" id="sip_stepup_check" onchange="toggleStepUp()" style="margin-right:10px; width:18px; height:18px;"> Enable Step-Up
-                </label>
+                <label style="display:flex; align-items:center; margin-bottom:10px; font-weight:600;"><input type="checkbox" id="sip_stepup_check" onchange="toggleStepUp()" style="margin-right:10px;"> Enable Step-Up</label>
                 <div id="stepup_panel" style="display:none;">
-                    <div class="radio-group" style="margin-bottom:10px;">
-                        <label style="margin-right:15px; font-weight:600; font-size:0.9rem; color:var(--text-muted)"><input type="radio" name="stepup_type" value="percent" checked onclick="calculateSIP()"> Percentage</label>
-                        <label style="font-weight:600; font-size:0.9rem; color:var(--text-muted)"><input type="radio" name="stepup_type" value="value" onclick="calculateSIP()"> Amount</label>
-                    </div>
+                    <div style="margin-bottom:10px;"><label style="margin-right:15px;"><input type="radio" name="stepup_type" value="percent" checked onclick="calculateSIP()"> %</label><label><input type="radio" name="stepup_type" value="value" onclick="calculateSIP()"> Amount</label></div>
                     <input type="number" class="input-field" id="sip_step_val" value="10" oninput="calculateSIP()">
                 </div>
             </div>
@@ -358,8 +254,8 @@
     <div id="swp" class="calc-grid">
         <div class="panel">
             <div class="panel-title">Withdrawal Plan</div>
-            <div class="input-group"><div class="label-row"><span>Total Corpus</span></div><input type="number" class="input-field" id="swp_amount_num" value="1000000" oninput="sync('swp_amount', 'num')"><input type="range" id="swp_amount_rng" min="100000" max="50000000" step="50000" value="1000000" oninput="sync('swp_amount', 'rng')"></div>
-            <div class="input-group"><div class="label-row"><span>Withdrawal/Mo</span></div><input type="number" class="input-field" id="swp_withdraw_num" value="5000" oninput="sync('swp_withdraw', 'num')"><input type="range" id="swp_withdraw_rng" min="500" max="200000" step="500" value="5000" oninput="sync('swp_withdraw', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Corpus</span></div><input type="number" class="input-field" id="swp_amount_num" value="1000000" oninput="sync('swp_amount', 'num')"><input type="range" id="swp_amount_rng" min="100000" max="50000000" step="50000" value="1000000" oninput="sync('swp_amount', 'rng')"></div>
+            <div class="input-group"><div class="label-row"><span>Withdrawal</span></div><input type="number" class="input-field" id="swp_withdraw_num" value="5000" oninput="sync('swp_withdraw', 'num')"><input type="range" id="swp_withdraw_rng" min="500" max="200000" step="500" value="5000" oninput="sync('swp_withdraw', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Return (%)</span></div><input type="number" class="input-field" id="swp_rate_num" value="8" oninput="sync('swp_rate', 'num')"><input type="range" id="swp_rate_rng" min="1" max="20" step="0.5" value="8" oninput="sync('swp_rate', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Years</span></div><input type="number" class="input-field" id="swp_years_num" value="10" oninput="sync('swp_years', 'num')"><input type="range" id="swp_years_rng" min="1" max="40" step="1" value="10" oninput="sync('swp_years', 'rng')"></div>
         </div>
@@ -381,22 +277,8 @@
             <div class="input-group"><div class="label-row"><span>Amount</span></div><input type="number" class="input-field" id="int_amount_num" value="100000" oninput="sync('int_amount', 'num')"><input type="range" id="int_amount_rng" min="5000" max="10000000" step="5000" value="100000" oninput="sync('int_amount', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Rate (%)</span></div><input type="number" class="input-field" id="int_rate_num" value="7" oninput="sync('int_rate', 'num')"><input type="range" id="int_rate_rng" min="1" max="15" step="0.1" value="7" oninput="sync('int_rate', 'rng')"></div>
             <div class="input-group"><div class="label-row"><span>Years</span></div><input type="number" class="input-field" id="int_years_num" value="5" oninput="sync('int_years', 'num')"><input type="range" id="int_years_rng" min="1" max="25" step="1" value="5" oninput="sync('int_years', 'rng')"></div>
-            <div class="input-group">
-                <div class="label-row"><span>Type</span></div>
-                <select id="int_type" class="custom-select" onchange="toggleFrequency(); recalcActive();">
-                    <option value="compound">Compound Interest</option>
-                    <option value="simple">Simple Interest</option>
-                </select>
-            </div>
-            <div class="input-group" id="freq_group">
-                <div class="label-row"><span>Frequency</span></div>
-                <select id="int_freq" class="custom-select" onchange="recalcActive()">
-                    <option value="1">Yearly</option>
-                    <option value="2">Half-Yearly</option>
-                    <option value="4">Quarterly</option>
-                    <option value="12">Monthly</option>
-                </select>
-            </div>
+            <div class="input-group"><div class="label-row"><span>Type</span></div><select id="int_type" class="custom-select" onchange="toggleFrequency(); recalcActive();"><option value="compound">Compound Interest</option><option value="simple">Simple Interest</option></select></div>
+            <div class="input-group" id="freq_group"><div class="label-row"><span>Frequency</span></div><select id="int_freq" class="custom-select" onchange="recalcActive()"><option value="1">Yearly</option><option value="2">Half-Yearly</option><option value="4">Quarterly</option><option value="12">Monthly</option></select></div>
         </div>
         <div class="panel">
             <div class="panel-title">Maturity</div>
@@ -431,10 +313,10 @@
 </div>
 
 <script>
-    /* --- STATE --- */
+    /* --- CONFIG & STATE --- */
     let customPayments = { re: [], loan: [] };
     let strategies = { re: 'tenure', loan: 'tenure' }; 
-    let charts = { sip: null, loan: null, swp: null, re: null, int: null, trade: null };
+    let charts = { sip: null, loan: null, swp: null, re: null, int: null, trade: null, smart: null };
     const formatMoney = (num) => num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
     /* --- SAFE GET/SET --- */
@@ -452,7 +334,7 @@
 
     /* --- INIT --- */
     window.onload = function() {
-        calculateRealEstate(); 
+        calculateSmartPlan('base'); 
     }
 
     /* --- THEME --- */
@@ -469,16 +351,17 @@
         document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         const btns=document.querySelectorAll('.tab-btn');
-        if(id=='realestate')btns[0].classList.add('active');
-        if(id=='loan')btns[1].classList.add('active');
-        if(id=='sip')btns[2].classList.add('active');
-        if(id=='swp')btns[3].classList.add('active');
-        if(id=='lumpsum')btns[4].classList.add('active');
-        if(id=='trade')btns[5].classList.add('active');
+        if(id=='smartplan')btns[0].classList.add('active');
+        if(id=='realestate')btns[1].classList.add('active');
+        if(id=='loan')btns[2].classList.add('active');
+        if(id=='sip')btns[3].classList.add('active');
+        if(id=='swp')btns[4].classList.add('active');
+        if(id=='lumpsum')btns[5].classList.add('active');
+        if(id=='trade')btns[6].classList.add('active');
         recalcActive();
     }
 
-    /* --- SYNC --- */
+    /* --- INPUT SYNC --- */
     function sync(idBase, source) {
         const num = document.getElementById(idBase + '_num'); const rng = document.getElementById(idBase + '_rng');
         if(num && rng) { if(source === 'rng') num.value = rng.value; else rng.value = num.value; }
@@ -506,7 +389,8 @@
         calculateRealEstate();
     }
     function recalcActive() {
-        if(document.getElementById('realestate').classList.contains('active')) calculateRealEstate();
+        if(document.getElementById('smartplan').classList.contains('active')) calculateSmartPlan('base');
+        else if(document.getElementById('realestate').classList.contains('active')) calculateRealEstate();
         else if(document.getElementById('loan').classList.contains('active')) calculateLoan();
         else if(document.getElementById('sip').classList.contains('active')) calculateSIP();
         else if(document.getElementById('swp').classList.contains('active')) calculateSWP();
@@ -569,6 +453,98 @@
             ht+=`<tr ${cls}>`; x.d.forEach((c,i)=>{ let v=c; if(i===2&&x.pre) v+=`<div style="font-size:0.75rem; color:var(--success); font-weight:700">+${formatMoney(x.preVal)}</div>`; ht+=`<td>${v}</td>`; }); ht+=`</tr>`;
         });
         el.innerHTML=ht+`</tbody>`;
+    }
+
+    /* --- 0. SMART PLAN LOGIC (BIDIRECTIONAL) --- */
+    function calculateSmartPlan(source) {
+        if(source.includes('amount')) {
+            const num = document.getElementById('smart_plan_amount_num');
+            const rng = document.getElementById('smart_plan_amount_rng');
+            if(source === 'amount_rng') num.value = rng.value; else rng.value = num.value;
+        }
+        if(source.includes('rate')) {
+            const num = document.getElementById('smart_plan_rate_num');
+            const rng = document.getElementById('smart_plan_rate_rng');
+            if(source === 'rate_rng') num.value = rng.value; else rng.value = num.value;
+        }
+
+        const monthly = safeGet('smart_amt_num');
+        const invYears = safeGet('smart_inv_yrs_num');
+        const waitYears = safeGet('smart_wait_yrs_num');
+        const rateMF = safeGet('smart_mf_rate_num');
+        
+        safeSet('smart_total_dur', invYears + waitYears);
+        const monthsInv = invYears * 12;
+        const monthsWait = waitYears * 12;
+
+        let ratePlan = safeGet('smart_plan_rate_num');
+        let targetPlanAmount = safeGet('smart_plan_amount_num');
+
+        if (source.includes('amount') && targetPlanAmount > 0) {
+            ratePlan = findRate(monthly, monthsInv, monthsWait, targetPlanAmount);
+            safeSet('smart_plan_rate_num', ratePlan.toFixed(2));
+            document.getElementById('smart_plan_rate_rng').value = ratePlan.toFixed(2);
+        } else {
+            targetPlanAmount = calculateCorpus(monthly, monthsInv, monthsWait, ratePlan);
+            safeSet('smart_plan_amount_num', targetPlanAmount.toFixed(0));
+            document.getElementById('smart_plan_amount_rng').value = targetPlanAmount;
+        }
+
+        let corpusMF = calculateCorpus(monthly, monthsInv, monthsWait, rateMF);
+        let totalInv = monthly * monthsInv;
+
+        safeSet('smart_invested', formatMoney(totalInv));
+        safeSet('smart_plan_val', formatMoney(targetPlanAmount));
+        safeSet('smart_mf_val', formatMoney(corpusMF));
+        safeSet('smart_gap', formatMoney(corpusMF - targetPlanAmount));
+
+        generateSmartChart(monthly, monthsInv, monthsWait, ratePlan, rateMF);
+    }
+
+    function calculateCorpus(monthly, invMonths, waitMonths, rate) {
+        let corpus = 0;
+        let r = rate/1200;
+        for(let m=1; m<=invMonths; m++) corpus = (corpus + monthly) * (1 + r);
+        for(let m=1; m<=waitMonths; m++) corpus = corpus * (1 + r);
+        return corpus;
+    }
+
+    function findRate(monthly, invMonths, waitMonths, targetVal) {
+        let low = 0, high = 100;
+        for(let i=0; i<50; i++) {
+            let mid = (low+high)/2;
+            let val = calculateCorpus(monthly, invMonths, waitMonths, mid);
+            if(val > targetVal) high = mid;
+            else low = mid;
+        }
+        return low;
+    }
+
+    function generateSmartChart(monthly, invMonths, waitMonths, rPlan, rMF) {
+        let labels = ['Start'];
+        let dInv = [0];
+        let dPlan = [0];
+        let dMF = [0];
+        let cPlan = 0, cMF = 0, totInv = 0;
+
+        for(let m=1; m<=invMonths; m++) {
+            cPlan = (cPlan + monthly) * (1 + rPlan/1200);
+            cMF = (cMF + monthly) * (1 + rMF/1200);
+            totInv += monthly;
+            if(m%12===0) {
+                labels.push('Yr '+m/12);
+                dInv.push(totInv); dPlan.push(cPlan); dMF.push(cMF);
+            }
+        }
+        for(let m=1; m<=waitMonths; m++) {
+            cPlan = cPlan * (1 + rPlan/1200);
+            cMF = cMF * (1 + rMF/1200);
+            if(m%12===0) {
+                labels.push('Yr '+(invMonths/12 + m/12));
+                dInv.push(totInv); dPlan.push(cPlan); dMF.push(cMF);
+            }
+        }
+        updateChart('smart', 'smartChart', labels, dInv, 'Invested', '#9CA3AF', dPlan, 'Traditional Plan', '#6366F1', dMF, 'Mutual Fund', '#10B981');
     }
 
     /* --- SCHEDULE ENGINE --- */
